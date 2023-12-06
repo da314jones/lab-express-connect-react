@@ -10,10 +10,10 @@ function App() {
     <Router>
       <Routes>
         <NavBar />
-        <Route exaact path="/logs" component={Welcome} />
-        <Route exact path="/logs" component={CaptainLogs} />
-        <Route path="/logs/new" component={Log} />
-        <Route path="/logs/:id" component={LogDetails} />
+        <Route exact path="/logs" component={<Welcome />} />
+        <Route exact path="/logs" component={<CaptainLogs />} />
+        <Route path="/logs/new" component={<Log />} />
+        <Route path="/logs/:id" component={<LogDetails />} />
       </Routes>
     </Router>
   );

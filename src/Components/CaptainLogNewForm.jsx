@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 const API = import.meta.env.VITE_BASE_URL
 
 function BookmarkNewForm() {
-  const [log, setlog] = useState({
+  const [log, setLog] = useState({
     captainName: "",
     title: "",
     post: "",
@@ -18,7 +18,7 @@ function BookmarkNewForm() {
   };
 
   const handleCheckboxChange = () => {
-    setLog({ ...log, mistakesWereMadeToday: !Log.mistakesWereMadeToday });
+    setLog({ ...log, mistakesWereMadeToday: !log.mistakesWereMadeToday });
   };
 
   const addLog = () => {
@@ -32,7 +32,7 @@ function BookmarkNewForm() {
     fetch(`${API}/logs`, httpOptions)
       .then((res) => {
         console.log(res)
-        alert(`Log titled '${log.name}' was added to the database!`);
+        alert(`Log titled '${log.title}' was added to the database!`);
         navigate('/logs');
       })
       .catch((err) => console.error(err))
@@ -55,7 +55,7 @@ function BookmarkNewForm() {
           placeholder="Captain's Name"
           required
         />
-        <label htmlFor="url">URL:</label>
+        <label htmlFor="url">Title:</label>
         <input
           id="title"
           type="text"
@@ -64,13 +64,13 @@ function BookmarkNewForm() {
           placeholder="Log Title"
           onChange={handleTextChange}
         />
-        <label htmlFor="category">Category:</label>
+        <label htmlFor="category">Post:</label>
         <input
-          id="category"
+          textarea
+          id="post"
           type="text"
-          name="category"
-          value={bookmark.category}
-          placeholder="educational, inspirational, ..."
+          value={log.post}
+          placeholder="Log Post"
           onChange={handleTextChange}
         />
         <label htmlFor="isFavorite">Favorite:</label>
@@ -87,6 +87,15 @@ function BookmarkNewForm() {
           value={bookmark.description}
           onChange={handleTextChange}
           placeholder="Describe why you bookmarked this site"
+        />
+        <label htmlFor="daysSinceLastCrisis">Days Since Last Crisis:</label>
+        <input
+          id="daysSinceLastCrisis"
+          type="number"
+          value={log.daysSinceLastCrisis}
+          onChange={handleTextChange}
+          placeholder="0"
+          required
         />
         <br />
         <input type="submit" />

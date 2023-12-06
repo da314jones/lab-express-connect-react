@@ -68,6 +68,7 @@ export default function Log() {
 <input 
 id="daysSinceLastCrisis"
 type="number"
+value={newLog.daysSinceLastCrisis}
 onChange={handleTextChange}
  />
  <br />
