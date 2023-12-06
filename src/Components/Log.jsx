@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-const API = process.env.REACT_APP_BASE_URL;
+const API = process.env.VITE_BASE_URL;
 
 export default function Log() {
   const [newLog, setNewLog] = useState({

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-const API = process.env.REACT_APP_BASE_URL;
+const API = process.env.VITE_BASE_URL;
 
 
 export default function LogDetails() {
@@ -9,7 +9,7 @@ export default function LogDetails() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`$A{API}/logs/${id}`)
+    fetch(`${API}/logs/${id}`)
     .then(res => res.json())
     .then(capLogs => {
       console.log(capLogs);
