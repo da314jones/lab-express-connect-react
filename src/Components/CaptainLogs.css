@@ -1,0 +1,43 @@
+h3 {
+    padding-top: 40px;
+    font-size: 34px;
+}
+
+.logs-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.logs-container-table {
+    display: flexbox;
+    align-items: center;
+justify-content: center;
+}
+
+.table-container {
+    display: flex;
+    justify-content: center;
+    padding: 5% 10% 0 10%;
+}
+
+
+.logs-container-table th,
+.logs-container-table td {
+  border: 1px solid #cccccc; 
+  text-align: center;
+}
+
+.logs-container-table th, .logs-container-table td {
+    padding: 1.5em; 
+    border: 1px solid #ddd; 
+    text-align: center;
+}
+
+.logs-container-table th {
+    width: 15%;
+}
+
+.logs-container-table tbody tr {
+    height: 150%; 
+}
+

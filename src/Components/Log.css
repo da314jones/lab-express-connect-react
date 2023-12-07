@@ -1,0 +1,9 @@
+
+.details-link {
+    color: blue; /* Default color */
+    text-decoration: none; /* Optional: removes underline */
+}
+
+.details-link:hover {
+    color: green; /* Color on hover */
+}

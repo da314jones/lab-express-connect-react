@@ -1,115 +1,147 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-const API = import.meta.env.VITE_BASE_URL;
-// if we need to edit something - we need the value it has currently;
-   // what kind of req do we need to make for that?
+const API = process.env.REACT_APP_BASE_URL;
 
-function BookmarkEditForm() {
-  // why are we grabbing index? we  need top grab a SPECIFIC bookmark
+export default function CaptainLogEditForm() {
   let { id } = useParams();
-
-  const [bookmark, setBookmark] = useState({
-    name: "",
-    url: "",
-    category: "",
-    description: "",
-    isFavorite: false,
+  const [log, setLog] = useState({
+    captainName: "",
+    title: "",
+    post: "",
+    mistakesWereMadeToday: false,
+    daysSinceLastCrisis: 0,
   });
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch(`${API}/logs/${id}`)
+      .then((response) => response.json())
+      .then((log) => {
+        setLog(log);
+      })
+      .catch(() => navigate("/not-found"));
+  }, [id, navigate]);
+
   const handleTextChange = (event) => {
-    setBookmark({ ...bookmark, [event.target.id]: event.target.value });
+    setLog({ ...log, [event.target.id]: event.target.value });
   };
 
   const handleCheckboxChange = () => {
-    setBookmark({ ...bookmark, isFavorite: !bookmark.isFavorite });
+    setLog({ ...log, mistakesWereMadeToday: !log.mistakesWereMadeToday });
   };
-  // once page loads WE NEED THE BOOKMARK to set our state with 
-  useEffect(() => {
-    fetch(`${API}/bookmarks/${id}`)
-      .then(response => response.json())
-      .then(bookmark => {
-        console.log(bookmark)
-        setBookmark(bookmark)
-    })
-    .catch(() => navigate("/not-found"))
-  }, [id, navigate]);
 
-  const updateBookmark = () => {
-    // our config for the fetch
+  const updateLog = () => {
     const httpOptions = {
-      "method" : "PUT",
-      "body" : JSON.stringify(bookmark),
-      "headers" : {
-        "Content-type" : "application/json"
-      }
-    }
+      method: "PUT",
+      body: JSON.stringify(log),
+      headers: {
+        "Content-type": "application/json",
+      },
+    };
 
-      fetch(`${API}/bookmarks/${id}`, httpOptions)
-        .then(() => { 
-          alert(`${bookmark.name} has been updated!`);
-          navigate(`/bookmarks/${id}`)
-        })
-        .catch((err) => console.error(err))
-  }
+    fetch(`${API}/logs/${id}`, httpOptions)
+      .then(() => {
+        alert(`${log.title} has been updated!`);
+        navigate(`/logs/${id}`);
+      })
+      .catch((err) => console.error(err));
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    updateBookmark();
+    updateLog();
   };
-  return (
-    <div className="Edit">
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name:</label>
-        <input
-          id="name"
-          value={bookmark.name}
-          type="text"
-          onChange={handleTextChange}
-          placeholder="Name of Website"
-          required
-        />
-        <label htmlFor="url">URL:</label>
-        <input
-          id="url"
-          type="text"
-          pattern="http[s]*://.+"
-          required
-          value={bookmark.url}
-          placeholder="http://"
-          onChange={handleTextChange}
-        />
-        <label htmlFor="category">Category:</label>
-        <input
-          id="category"
-          type="text"
-          name="category"
-          value={bookmark.category}
-          placeholder="educational, inspirational, ..."
-          onChange={handleTextChange}
-        />
-        <label htmlFor="isFavorite">Favorite:</label>
-        <input
-          id="isFavorite"
-          type="checkbox"
-          onChange={handleCheckboxChange}
-          checked={bookmark.isFavorite}
-        />
-        <label htmlFor="description">Description:</label>
-        <textarea
-          id="description"
-          name="description"
-          value={bookmark.description}
-          onChange={handleTextChange}
-          placeholder="Describe why you bookmarked this site"
-        />
-        <br />
 
-        <input type="submit" />
-      </form>
-      <Link to={`/bookmarks/${id}`}>
-        <button>Nevermind!</button>
-      </Link>
-    </div>
+  return (
+    <form onSubmit={handleSubmit} className="space-y-12">
+      <div className="border-b border-gray-900/10 pb-12">
+        <h2 className="text-4xl font-semibold leading-7 text-gray-900">Edit Log Entry</h2>
+        <p className="mt-1 text-sm leading-6 text-gray-600">
+          Update the details for this captain's log entry.
+        </p>
+        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="sm:col-span-3">
+            <label htmlFor="captainName" className="block text-sm font-medium leading-6 text-gray-900">
+              Captain Name
+            </label>
+            <input
+              id="captainName"
+              value={log.captainName}
+              type="text"
+              onChange={handleTextChange}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              required
+            />
+          </div>
+
+          <div className="sm:col-span-3">
+            <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
+              Title
+            </label>
+            <input
+              id="title"
+              type="text"
+              value={log.title}
+              onChange={handleTextChange}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              required
+            />
+          </div>
+
+          <div className="col-span-full">
+            <label htmlFor="post" className="block text-sm font-medium leading-6 text-gray-900">
+              Post
+            </label>
+            <textarea
+              id="post"
+              value={log.post}
+              onChange={handleTextChange}
+              rows={3}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+
+          <div className="sm:col-span-6">
+            <label htmlFor="mistakesWereMadeToday" className="block text-sm font-medium leading-6 text-gray-900">
+              Mistakes Were Made Today
+            </label>
+            <input
+              id="mistakesWereMadeToday"
+              type="checkbox"
+              onChange={handleCheckboxChange}
+              checked={log.mistakesWereMadeToday}
+              className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+
+          <div className="sm:col-span-3">
+            <label htmlFor="daysSinceLastCrisis" className="block text-sm font-medium leading-6 text-gray-900">
+              Days Since Last Crisis
+            </label>
+            <input
+              id="daysSinceLastCrisis"
+              type="number"
+              value={log.daysSinceLastCrisis}
+              onChange={handleTextChange}
+              placeholder="0"
+              required
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 flex items-center justify-end gap-x-6">
+        <Link to={`/logs/${id}`} className="text-sm font-semibold leading-6 text-gray-900">
+          Cancel
+        </Link>
+        <button
+          type="submit"
+          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          Update
+        </button>
+      </div>
+    </form>
   );
 }
-
-export default BookmarkEditForm;
